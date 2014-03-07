@@ -1,28 +1,43 @@
-## 100s digit of the number in words + 'hundred ' + 'and ' + rest of digits in words
-    ## divmod - Returns an array containing the quotient and modulus
-    ##  obtained by dividing num by numeric. If q, r = x.divmod(y), then q = floor(x/y) x = q*y+r
-
 def numbers_to_words(number)
-  number_words_hash = {
-    1 => "one", 2 => "two", 3 => "three", 4 => "four", 5 => "five", 6 => "six", 7 => "seven", 8 => "eight", 9 => "nine"
-  }
+  single_digit = {1 => "one", 2 => "two", 3 => "three", 4 => "four", 5 => "five", 6 => "six", 7 => "seven", 8 => "eight", 9 => "nine"}
+
+  tens = {1 => "ten",2 => "twenty", 3 => "thirty", 4 => "forty", 5 => "fifty", 6 => "sixty", 7 => "seventy", 8 => "eighty", 9 => "ninety"}
+
   digits = []
-  digits_to_words = []
+  final_words = []
 
-  while number > 0 ## split number into an array of digits
-    digits.unshift(number % 10) ## take number and place remainder of number divided by 10 into array
-    number /= 10 ## set number to original number divided by 10, giving you next digits place
-  end ## loop ends and the result is each number in proper digits placed reversed. E.G. 123 = ['3','2','1']
-
-  digits = digits.reverse
-
-  digits.reverse.each do |digit| ## reverse the digit array and for each digit return the digit word into a new array.
-    digits_to_words << number_words_hash[digit] ## look for current digit in number_words_hash and return the associated number word and place into array.
-    print digits_to_words
+  until number == 0
+    digits << number % 10
+    number /= 10
+  end
   end
 
-  print digits_to_words
+  digits = digits.reverse
+  digits_lngth = digits.length
 
+  p digits.join.to_i
+
+  digits.each_with_index do |digit, index|
+    if index == (digits_lngth - 3)
+      final_words << single_digit[digit].to_s + " hundred"
+    elsif index == digits_lngth - 2
+      final_words << tens[digit]
+    #elsif index == (digits_lngth - 4)
+    #  final_words << single_digit[digit].to_s + " thousand"
+    else
+      final_words << single_digit[digit]
+
+# Notes:
+# Rules:
+# thousands - if digits.length / 3 = 1 & <= 2 . Add 'thousand' at index at length-4
+# millions - if digits.length / 3 = 2 & <= 3 . Add 'million' at index at length-7
+# etc..
+    end
+  end
+
+
+p final_words.join(" ")
 end
 
-numbers_to_words(9321)
+p numbers_to_words(1523)
+
